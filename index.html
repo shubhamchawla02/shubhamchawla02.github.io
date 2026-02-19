@@ -429,6 +429,47 @@
             <p id="currentDate"></p>
         </div>
 
+        <!-- Countdown to meeting -->
+        <div class="card">
+            <div class="counter-section">
+                <div class="counter-label">Time Until We Meet 💕</div>
+                <div style="font-size: 1.3rem; color: var(--primary); margin: 15px 0; font-weight: 600;">April 11, 2025</div>
+                <div class="countdown-grid">
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="countdownDays">0</span>
+                        <span class="countdown-label">Days</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="countdownHours">0</span>
+                        <span class="countdown-label">Hours</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="countdownMinutes">0</span>
+                        <span class="countdown-label">Minutes</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="countdownSeconds">0</span>
+                        <span class="countdown-label">Seconds</span>
+                    </div>
+                </div>
+                <p style="margin-top: 20px; font-size: 1.1rem;">
+                    Can't wait to see you again!
+                </p>
+            </div>
+        </div>
+
+        <!-- Time since talking -->
+        <div class="card">
+            <div class="counter-section">
+                <div class="counter-label">Time since we started talking</div>
+                <div class="counter" id="dayCounter">...</div>
+                <div style="font-size: 1.2rem; color: var(--primary); margin-top: 10px;" id="timeDetails">...</div>
+                <p style="margin-top: 20px; font-size: 1.1rem;">
+                    And every single moment has reminded me how special you are.
+                </p>
+            </div>
+        </div>
+
         <!-- Collapsible Card 1 -->
         <div class="card collapsible-card">
             <div class="card-header" onclick="toggleCard('card1')">
@@ -464,6 +505,7 @@
             </div>
         </div>
 
+        <!-- Interactive Valentine card -->
         <div class="card interactive-section">
             <h2>So Here's My Question...</h2>
             <p style="margin-bottom: 30px; font-size: 1.3rem;">
@@ -498,46 +540,6 @@
                         Happy Valentine's Day, my Valentine 💕✨
                     </p>
                 </div>
-            </div>
-        </div>
-
-        <!-- Countdown to meeting -->
-        <div class="card">
-            <div class="counter-section">
-                <div class="counter-label">Time Until We Meet 💕</div>
-                <div style="font-size: 1.3rem; color: var(--primary); margin: 15px 0; font-weight: 600;">April 11, 2025</div>
-                <div class="countdown-grid">
-                    <div class="countdown-item">
-                        <span class="countdown-number" id="countdownDays">0</span>
-                        <span class="countdown-label">Days</span>
-                    </div>
-                    <div class="countdown-item">
-                        <span class="countdown-number" id="countdownHours">0</span>
-                        <span class="countdown-label">Hours</span>
-                    </div>
-                    <div class="countdown-item">
-                        <span class="countdown-number" id="countdownMinutes">0</span>
-                        <span class="countdown-label">Minutes</span>
-                    </div>
-                    <div class="countdown-item">
-                        <span class="countdown-number" id="countdownSeconds">0</span>
-                        <span class="countdown-label">Seconds</span>
-                    </div>
-                </div>
-                <p style="margin-top: 20px; font-size: 1.1rem;">
-                    Can't wait to see you again!
-                </p>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="counter-section">
-                <div class="counter-label">Time since we started talking</div>
-                <div class="counter" id="dayCounter">...</div>
-                <div style="font-size: 1.2rem; color: var(--primary); margin-top: 10px;" id="timeDetails">...</div>
-                <p style="margin-top: 20px; font-size: 1.1rem;">
-                    And every single moment has reminded me how special you are.
-                </p>
             </div>
         </div>
 
@@ -756,18 +758,25 @@
         }
 
         function updateDayCounter() {
-            const startDate = new Date('2025-11-15T00:00:00');
+            const startDate = new Date('2025-11-03T00:00:00');
             const now = new Date();
-            const diffTime = now - startDate;
-            
-            const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diffTime % (1000 * 60)) / 1000);
-            
-            document.getElementById('dayCounter').textContent = days + ' days';
-            document.getElementById('timeDetails').textContent = 
-                `${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+            let months = (now.getFullYear() - startDate.getFullYear()) * 12 + (now.getMonth() - startDate.getMonth());
+            const monthsAfterStart = new Date(startDate);
+            monthsAfterStart.setMonth(monthsAfterStart.getMonth() + months);
+            if (monthsAfterStart > now) {
+                months--;
+                monthsAfterStart.setMonth(monthsAfterStart.getMonth() - 1);
+            }
+
+            const remaining = now - monthsAfterStart;
+            const days    = Math.floor(remaining / (1000 * 60 * 60 * 24));
+            const hours   = Math.floor((remaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+
+            document.getElementById('dayCounter').textContent = months + ' months';
+            document.getElementById('timeDetails').textContent =
+                `${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
         }
         
         function startCounters() {
